@@ -1,0 +1,51 @@
+#Importing Various Libraries
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#Loading the Data
+df=pd.read_csv("irris.csv")
+df
+
+#Understanding the Data
+df.info()
+df.head()
+df.tail()
+df.shape
+df.describe()
+
+#Checking the Null Values
+df.isnull().sum()
+df.columns
+
+#Visualizing the Data
+sns.pairplot(df, hue="species")
+sns.heatmap(df.corr())
+
+x=df.iloc[:,:-1]
+y=df.iloc[:,-1]
+x
+y
+
+#Model Training
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(x,y , test_size=0.2)
+from sklearn.svm import SVC
+svn = SVC()
+svn.fit(X_train, y_train)
+
+#Model Evaluation
+predictions = svn.predict(X_test)
+
+# Calculate the accuracy
+from sklearn.metrics import accuracy_score
+accuracy_score(y_test, predictions)
+from sklearn.metrics import classification_report
+print(classification_report(y_test, predictions))
+
+#Testing the Model
+X_new = np.array([[3, 2, 1, 0.2], [  4.9, 2.2, 3.8, 1.1 ], [  5.3, 2.5, 4.6, 1.9 ]])
+#Prediction of the species from the input vector
+prediction = svn.predict(X_new)
+print("Prediction of Species: {}".format(prediction))
